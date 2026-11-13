@@ -1,27 +1,21 @@
-#goal: My goal is to create an image from a CI workflow and if it is done I want to deploy that image 
+# goal: Deploy the image built by the CI workflow
 name: CD
 
 on:
   workflow_call:
-    workflows: ["CI"] 
-    types:
-      - completed
-    branches:
-      - main
-      - master
 
 jobs:
   deploy:
-    runs-on: self-hosted  
+    runs-on: self-hosted
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-  
+
       - name: Copy example env to .env
-        run: cp .env.example .env 
+        run: cp .env.example .env
 
       - name: Pull latest images and restart containers
         run: |
           docker compose pull
-          docker compose up -d 
+          docker compose up -d
 
