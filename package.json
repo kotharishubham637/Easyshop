@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
-    "db:init": "node src/scripts/initDb.js"
+    "db:init": "node src/scripts/initDb.js",
+    "lint": "eslint ."
   },
   "engines": {
     "node": ">=18"
@@ -17,5 +18,11 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "mysql2": "^3.11.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0",
+    "typescript-eslint": "^8.72.2"
   }
 }
