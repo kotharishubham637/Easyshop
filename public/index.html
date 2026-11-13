@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Easyshop – Electronics Store</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="logo" href="/">Easy<span>shop</span></a>
+    <input id="search" type="search" placeholder="Search phones, laptops, headphones…" aria-label="Search products" />
+    <button id="cartBtn" class="cart-btn" aria-label="Open cart">🛒 Cart <span id="cartCount">0</span></button>
+  </header>
+
+  <main class="layout">
+    <aside class="filters">
+      <h3>Categories</h3>
+      <ul id="categoryList"></ul>
+
+      <h3>Sort by</h3>
+      <select id="sort">
+        <option value="">Featured</option>
+        <option value="price_asc">Price: Low to High</option>
+        <option value="price_desc">Price: High to Low</option>
+        <option value="name">Name</option>
+        <option value="newest">Newest</option>
+      </select>
+
+      <h3>Price (₹)</h3>
+      <div class="price-range">
+        <input id="minPrice" type="number" min="0" placeholder="Min" />
+        <input id="maxPrice" type="number" min="0" placeholder="Max" />
+      </div>
+      <button id="applyPrice" class="btn secondary">Apply</button>
+    </aside>
+
+    <section class="content">
+      <div id="resultInfo" class="result-info"></div>
+      <div id="productGrid" class="grid"></div>
+      <div id="pagination" class="pagination"></div>
+    </section>
+  </main>
+
+  <!-- Cart drawer -->
+  <div id="overlay" class="overlay hidden"></div>
+  <aside id="cartDrawer" class="drawer hidden" aria-label="Shopping cart">
+    <div class="drawer-head">
+      <h2>Your Cart</h2>
+      <button id="closeCart" class="icon-btn" aria-label="Close cart">✕</button>
+    </div>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="cart-foot">
+      <div class="total-row"><span>Total</span><strong id="cartTotal">₹0</strong></div>
+      <button id="checkoutBtn" class="btn">Checkout</button>
+    </div>
+  </aside>
+
+  <!-- Checkout modal -->
+  <div id="checkoutModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+    <form id="checkoutForm" class="modal-card">
+      <h2 id="checkoutTitle">Checkout</h2>
+      <label>Full name<input name="name" required /></label>
+      <label>Email<input name="email" type="email" required /></label>
+      <label>Phone<input name="phone" type="tel" /></label>
+      <label>Shipping address<textarea name="address" rows="3" required></textarea></label>
+      <p id="checkoutError" class="error"></p>
+      <div class="modal-actions">
+        <button type="button" id="cancelCheckout" class="btn secondary">Cancel</button>
+        <button type="submit" class="btn">Place order</button>
+      </div>
+    </form>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+  <script src="app.js"></script>
+</body>
+</html>

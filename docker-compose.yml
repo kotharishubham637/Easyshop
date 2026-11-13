@@ -1,0 +1,38 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: easyshop-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-easyshop_root_pw}
+      MYSQL_DATABASE: easyshop
+    volumes:
+      - db_data:/var/lib/mysql
+      # Runs once, only when the volume is empty: creates tables + sample data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  app:
+    build: .
+    container_name: easyshop-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PORT: 3000
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: ${DB_PASSWORD:-easyshop_root_pw}
+      DB_NAME: easyshop
+    ports:
+      - "${APP_PORT:-3001}:3000"
+
+volumes:
+  db_data:
