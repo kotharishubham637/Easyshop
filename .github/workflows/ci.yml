@@ -25,10 +25,7 @@ jobs:
 
       - name: Run linters
         run: npm run lint
-        with:
-          eslint: true
-          prettier: false
-
+        
       - name: test the code
         run: echo "the code is tested" 
 
