@@ -50,9 +50,3 @@ jobs:
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/easyshop-frontend:latest
         
-  backend:
-    steps:
-      - lint:
-      - build:
-      - test: 
-      - push:
