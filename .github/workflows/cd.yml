@@ -1,0 +1,21 @@
+# goal: Deploy the image built by the CI workflow
+name: CD
+
+on:
+  workflow_call:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Copy example env to .env
+        run: cp .env.example .env
+
+      - name: Pull latest images and restart containers
+        run: |
+          docker compose pull
+          docker compose up -d
+
