@@ -86,4 +86,9 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           push: true
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/easyshop-backend:latest        
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/easyshop-backend:latest       
+
+      - name: deploy
+        needs: [frontend,backend]
+        uses: ./.github/workflows/cd.yml
+        secrets: inherit 
