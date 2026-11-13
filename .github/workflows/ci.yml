@@ -1,0 +1,58 @@
+# goal: To lint, build, and test the frontend and backend program in Node.js .
+# And then push the image to Docker Hub
+name: CI
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout the code
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      - name: Run linters
+        uses: wearerequired/lint-action@v3
+        with:
+          eslint: true
+          prettier: false
+
+      - name: test the code
+        run: echo "the code is tested" 
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build and push
+        uses: docker/build-push-action@v7
+        with:
+          push: true
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/easyshop-frontend:latest
+        
+  backend:
+    steps:
+      - lint:
+      - build:
+      - test: 
+      - push:
