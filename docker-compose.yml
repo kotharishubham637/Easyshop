@@ -4,7 +4,7 @@ services:
     container_name: easyshop-db
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-easyshop_root_pw}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: easyshop
     volumes:
       - db_data:/var/lib/mysql
@@ -29,7 +29,7 @@ services:
       DB_HOST: db
       DB_PORT: 3306
       DB_USER: root
-      DB_PASSWORD: ${DB_PASSWORD:-easyshop_root_pw}
+      DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: easyshop
     ports:
       - "${APP_PORT:-3001}:3000"
