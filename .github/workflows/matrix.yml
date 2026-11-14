@@ -2,8 +2,7 @@
 name: nodejs linter
 
 on:
-  push:
-    branches: [master]
+  workflow_call:
   workflow_dispatch:
 
 permissions:
@@ -28,9 +27,7 @@ jobs:
           node-version: ${{ matrix.nodeV }}
 
       - name: Install Node.js dependencies
-        run: |
-          npm --prefix frontend ci
-          npm --prefix backend ci
+        run: npm install
 
       - name: Run linters
         uses: wearerequired/lint-action@v3
