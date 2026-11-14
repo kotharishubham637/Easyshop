@@ -18,4 +18,4 @@ jobs:
     uses: ./.github/workflows/code-quality.yml
 
   secret-scanning:
-    uses: ./.github/workflows/secret-scannig.yml
+    uses: ./.github/workflows/secrets-scannig.yml
