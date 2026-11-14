@@ -1,0 +1,31 @@
+# goal: i have to do SAST for my code
+name : code quality
+
+on:
+  workflow_call:
+
+jobs:
+  sast:
+    runs-on: ubuntu-latest
+    strategy: 
+     fail-fast: false
+     matrix:
+      node: ['frontend','backend']
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: ${{matrix.node}}/pacakage-lock.json
+
+      - name: Install Node.js dependencies
+        run: npm install
+        working-directory: ${{matrix.node}}
+
+      - name: Run linters
+        run: npm run lint
+        working-directory: ${{matrix.node}}
