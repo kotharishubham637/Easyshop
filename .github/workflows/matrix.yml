@@ -6,9 +6,13 @@ on:
     branches: [master]
   workflow_dispatch:
 
+permissions:
+  checks: write
+  contents: write
+
 jobs:
   run-linters:
-    name: Run linters
+    name: Run linters (Node ${{ matrix.nodeV }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -24,12 +28,13 @@ jobs:
           node-version: ${{ matrix.nodeV }}
 
       - name: Install Node.js dependencies
-        run: npm ci
+        run: |
+          npm --prefix frontend ci
+          npm --prefix backend ci
 
       - name: Run linters
         uses: wearerequired/lint-action@v3
         with:
           eslint: true
           prettier: false
-
 
