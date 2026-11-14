@@ -16,3 +16,6 @@ permissions:
 jobs:
   code-quality:
     uses: ./.github/workflows/code-quality.yml
+
+  secret-scanning:
+    uses: ./.github/workflows/secret-scannig.yml
