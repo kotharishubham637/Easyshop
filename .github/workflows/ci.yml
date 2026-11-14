@@ -4,10 +4,11 @@ name: CI
 
 on:
   push:
+    branches: [main, master]
     paths:
       - '**'
-      - '!github/workflows/**'
-    branches: [main,master]
+      - '!.github/workflows/**'
+  workflow_dispatch:
 
 jobs:
 

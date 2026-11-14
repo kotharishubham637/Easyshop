@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        nodeV: ['27','26','24']
+        nodeV: ['27.0.0-alpha.0.1.0', '26', '24']
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v7
