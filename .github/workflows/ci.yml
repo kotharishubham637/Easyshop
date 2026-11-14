@@ -25,11 +25,9 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: 24
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
-            
+          
       - name: Install Node.js dependencies
-        run: npm ci
+        run: npm install
 
       - name: Run linters
         run: npm run lint
@@ -71,11 +69,9 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: 24
-          cache-dependency-path: backend/package-lock.json
-          cache: npm
-
+        
       - name: Install Node.js dependencies
-        run: npm ci
+        run: npm install
 
       - name: Run linters
         run: npm run lint
