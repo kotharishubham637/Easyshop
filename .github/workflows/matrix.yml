@@ -1,0 +1,33 @@
+#goal: My goal is to Install multiple versions of Node.js and Create lint for their multiple versions .
+name: nodejs linter
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-linters:
+    name: Run linters
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        nodeV: ['27','26','24']
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.nodeV }}
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      - name: Run linters
+        uses: wearerequired/lint-action@v3
+        with:
+          eslint: true
+          prettier: false
+
+
