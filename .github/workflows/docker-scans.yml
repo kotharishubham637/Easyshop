@@ -1,0 +1,26 @@
+# goal: To ensure that the Docker file and Docker Compose file are securely tested
+name: docker-scans
+
+on:
+  workflow_call:
+
+jobs:
+  docker-file-lint:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        side: ['frontend','backend']
+    steps:
+    - name: checkout-code
+      uses: actions/checkout@v3
+
+    - name: ${{matrix.side}}-dockerfile-lint
+      uses: hadolint/hadolint-action@v3.1.0
+      with:
+        dockerfile: Dockerfile
+        working-directory: ${{matrix.side}}/Dockerfile
+
+
+  docker-image-scan:
+    needs: [docker-file-lint] 
