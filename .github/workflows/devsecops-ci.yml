@@ -1,9 +1,17 @@
 # goal: To run the end-to-end DevSecOps pipeline 
 name: devsecops
 
+
+
 on:
   push:
     branches: [master]
+
+permissions:
+  actions: read
+  checks: write
+  contents: write
+  security-events: write
 
 jobs:
   code-quality:
