@@ -20,7 +20,4 @@ jobs:
       with:
         dockerfile: Dockerfile
         working-directory: ${{matrix.side}}/Dockerfile
-
-
-  docker-image-scan:
-    needs: [docker-file-lint] 
+ 
