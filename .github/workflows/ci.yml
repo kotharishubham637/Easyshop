@@ -14,6 +14,9 @@ jobs:
 
   frontend:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
     steps:
       - name: checkout the code
         uses: actions/checkout@v7
@@ -23,7 +26,8 @@ jobs:
         with:
           node-version: 24
           cache: npm
-
+          cache-dependency-path: frontend/package-lock.json
+            
       - name: Install Node.js dependencies
         run: npm ci
 
@@ -49,12 +53,16 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           push: true
+          context: ./frontend
           tags: ${{ vars.DOCKERHUB_USERNAME }}/easyshop-frontend:latest
 
 
 
   backend:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
     steps:
       - name: checkout the code
         uses: actions/checkout@v7
@@ -63,6 +71,7 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: 24
+          cache-dependency-path: backend/package-lock.json
           cache: npm
 
       - name: Install Node.js dependencies
@@ -90,9 +99,10 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           push: true
+          context: ./backend
           tags: ${{ vars.DOCKERHUB_USERNAME }}/easyshop-backend:latest       
 
   deploy:
-        needs: [frontend,backend]
-        uses: ./.github/workflows/cd.yml
-        secrets: inherit 
+    needs: [frontend, backend]
+    uses: ./.github/workflows/cd.yml
+    secrets: inherit
