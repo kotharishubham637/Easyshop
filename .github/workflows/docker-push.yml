@@ -1,13 +1,7 @@
-# goal: To lint, build, and test the program in Node.js, run the Node matrix, and deploy via CD.
-name: CI
+# goal: To build and push the Docker image, run the Node matrix, and deploy via CD after DevSecOps checks pass.
+name: docker-push
 
 on:
-  push:
-    branches: [main, master]
-          paths:
-            - '**'
-            - '!.github/workflows/**'
-      
   workflow_call:
 
 permissions:
@@ -47,4 +41,3 @@ jobs:
     needs: [matrix]
     uses: ./.github/workflows/cd.yml
     secrets: inherit
-
