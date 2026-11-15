@@ -1,0 +1,30 @@
+name: code-test
+on: 
+workflow_call:
+
+jobs:
+  runs-on: ubuntu-latest
+  strategy:
+    matrix:
+      node: ['src','public']
+  steps:
+
+    - name: code-checkout
+      uses: action/checkout@v7
+
+   - name: Setup NodeJs
+     uses: actions/setup-node@v6
+     with:
+        node-version: '20'
+        cache: npm
+        cache-dependency-path: ${{matrix.node}}/package-lock.json
+
+   - name: Install npm Packages
+     run: npm install --legacy-peer-deps
+     working-directory: ${{matrix.node}}        
+        
+    - name: run tests
+      run: npm run test
+      working-directory: ${{matrix.node}}
+
+

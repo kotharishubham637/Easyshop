@@ -8,7 +8,7 @@ on:
             - '**'
             - '!.github/workflows/**'
       
-  workflow_dispatch:
+  workflow_call:
 
 permissions:
   checks: write
@@ -20,20 +20,6 @@ jobs:
     steps:
       - name: checkout the code
         uses: actions/checkout@v7
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24
-
-      - name: Install Node.js dependencies
-        run: npm install
-
-      - name: Run linters
-        run: npm run lint
-
-      - name: test the code
-        run: echo "the code is tested"
 
       - name: Login to Docker Hub
         uses: docker/login-action@v4
