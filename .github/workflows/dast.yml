@@ -11,10 +11,13 @@ jobs:
       - name: Code Checkout
         uses: actions/checkout@v7
 
-      - name: Start Application & Database
+      - name: Create .env and Start Application & Database
+        env:
+          DB_PASSWORD: ${{ .env.DB_PASSWORD }}
         run: |
+          echo "DB_PASSWORD=$DB_PASSWORD" > .env
           docker compose up -d
-          sleep 15
+          sleep 20
           docker compose exec -T app npm run db:init
           for i in {1..15}; do
             curl -sf http://localhost:3001/api/health && break
