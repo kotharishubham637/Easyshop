@@ -13,9 +13,10 @@ jobs:
 
       - name: Create .env and Start Application & Database
         env:
-          DB_PASSWORD: ${{ .env.DB_PASSWORD }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: |
-          echo "DB_PASSWORD=$DB_PASSWORD" > .env
+          cp .env.example .env 2>/dev/null || true
+          grep -q '^DB_PASSWORD=' .env && sed -i "s|^DB_PASSWORD=.*|DB_PASSWORD=$DB_PASSWORD|" .env || echo "DB_PASSWORD=$DB_PASSWORD" >> .env
           docker compose up -d
           sleep 20
           docker compose exec -T app npm run db:init
