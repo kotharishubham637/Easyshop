@@ -11,6 +11,16 @@ jobs:
       - name: Code Checkout
         uses: actions/checkout@v7
 
+      - name: Start Application & Database
+        run: |
+          docker compose up -d
+          sleep 15
+          docker compose exec -T app npm run db:init
+          for i in {1..15}; do
+            curl -sf http://localhost:3001/api/health && break
+            sleep 2
+          done
+
       - name: OWASP ZAP Baseline Scan
         uses: zaproxy/action-baseline@v0.15.0
         with:
@@ -18,3 +28,7 @@ jobs:
           target: http://localhost:3001/
           fail_action: false
           allow_issue_writing: false
+
+      - name: Cleanup Containers
+        if: always()
+        run: docker compose down -v
