@@ -1,7 +1,5 @@
-# goal: To run the end-to-end DevSecOps pipeline 
+# goal: To run the end-to-end DevSecOps pipeline
 name: devsecops
-
-
 
 on:
   push:
@@ -25,15 +23,15 @@ jobs:
 
   docker-scan:
     uses: ./.github/workflows/docker-scans.yml
-  
+
   sonar-scan:
     uses: ./.github/workflows/sonar-scan.yml
     secrets: inherit
 
   code-test:
-    uses: ./.github/wowrkflow/code-tests.yml
+    uses: ./.github/workflows/code-tests.yml
 
   docker-push:
-    uses: ./.github/workflow/docker-push.yml
-    needs: [code-quality.yml,secrets-scanning.yml,dependency-scan.yml,docker-scans.yml,sonar-scan.yml,code-tests.yml]
-    secrets: inherit    
+    uses: ./.github/workflows/docker-push.yml
+    needs: [code-quality, secret-scanning, dependency-check, docker-scan, sonar-scan, code-test]
+    secrets: inherit
