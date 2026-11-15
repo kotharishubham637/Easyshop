@@ -1,4 +1,4 @@
-# goal: To build and push the Docker image, run the Node matrix, and deploy via CD after DevSecOps checks pass.
+# goal: Build and push the Docker image to Docker Hub, then deploy via CD
 name: docker-push
 
 on:
@@ -33,11 +33,7 @@ jobs:
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/easyshop:latest
 
-  matrix:
-    needs: [build-and-push]
-    uses: ./.github/workflows/matrix.yml
-
   deploy:
-    needs: [matrix]
+    needs: [build-and-push]
     uses: ./.github/workflows/cd.yml
     secrets: inherit
