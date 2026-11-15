@@ -42,4 +42,4 @@ jobs:
   deploy:
     needs: [docker-push]
     uses: ./.github/workflows/cd.yml
-    sec=crets: inherit
+    secrets: inherit
