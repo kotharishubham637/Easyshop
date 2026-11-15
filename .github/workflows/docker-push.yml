@@ -33,7 +33,3 @@ jobs:
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/easyshop:latest
 
-  deploy:
-    needs: [build-and-push]
-    uses: ./.github/workflows/cd.yml
-    secrets: inherit
