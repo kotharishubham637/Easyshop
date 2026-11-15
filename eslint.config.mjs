@@ -2,6 +2,7 @@ import js from "@eslint/js";
 import globals from "globals";
 
 export default [
+  { ignores: ["actions-runner/**", "node_modules/**"] },
   // Ignore folders that don't need linting
   {
     ignores: ["node_modules/**"],

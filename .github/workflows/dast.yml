@@ -1,0 +1,38 @@
+# goal: to ensure that my running application is free from OWASP top 10 securities issue
+name: OWASP ZAP DAST Scan
+
+on:
+  workflow_call:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v7
+
+      - name: Create .env and Start Application & Database
+        env:
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |
+          cp .env.example .env 2>/dev/null || true
+          grep -q '^DB_PASSWORD=' .env && sed -i "s|^DB_PASSWORD=.*|DB_PASSWORD=$DB_PASSWORD|" .env || echo "DB_PASSWORD=$DB_PASSWORD" >> .env
+          docker compose up -d
+          sleep 20
+          docker compose exec -T app node src/scripts/initDb.js
+          for i in {1..15}; do
+            curl -sf http://localhost:3001/api/health && break
+            sleep 2
+          done
+
+      - name: OWASP ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.15.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target: http://localhost:3001/
+          fail_action: false
+          allow_issue_writing: false
+
+      - name: Cleanup Containers
+        if: always()
+        run: docker compose down -v

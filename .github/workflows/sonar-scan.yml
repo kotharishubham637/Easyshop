@@ -1,0 +1,20 @@
+# goal: To check whether the application code coverage does not have security threats 
+
+
+name: sonar-qube-scan
+on:
+  workflow_call:
+
+jobs:
+  sonarqube:
+    runs-on: self-hosted
+    steps:
+
+    - name: code checkout
+      uses: actions/checkout@v7
+     
+    - name: SonarQube Scan
+      uses: SonarSource/sonarqube-scan-action@v7
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: http://localhost:9000

@@ -1,0 +1,52 @@
+# goal: Run matrix and all DevSecOps checks in parallel, then push to Docker Hub and deploy
+name: devsecops
+
+on:
+  push:
+    branches: [master]
+
+permissions:
+  actions: read
+  checks: write
+  contents: write
+  security-events: write
+
+jobs:
+  code-quality:
+    uses: ./.github/workflows/code-quality.yml
+
+  secret-scanning:
+    uses: ./.github/workflows/secrets-scanning.yml
+
+  dependency-check:
+    uses: ./.github/workflows/dependency-scan.yml
+
+  docker-scan:
+    uses: ./.github/workflows/docker-scans.yml
+
+  sonar-scan:
+    uses: ./.github/workflows/sonar-scan.yml
+    secrets: inherit
+
+  code-test:
+    uses: ./.github/workflows/code-tests.yml
+
+  matrix:
+    uses: ./.github/workflows/matrix.yml
+
+      ##--------- CD ---------##
+
+  docker-push:
+    uses: ./.github/workflows/docker-push.yml
+    needs: [code-quality, secret-scanning, dependency-check, docker-scan, sonar-scan, code-test, matrix]
+    secrets: inherit
+
+  deploy:
+    needs: [docker-push]
+    uses: ./.github/workflows/cd.yml
+    secrets: inherit
+
+  dast:
+    needs: [deploy]
+    uses: ./.github/workflows/dast.yml
+    secrets: inherit

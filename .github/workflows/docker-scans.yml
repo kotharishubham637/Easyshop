@@ -1,0 +1,41 @@
+# goal: To ensure that the Docker file and Docker Compose file are securely tested
+# goal: To ensure that the Dockerfile is securely linted and scanned
+name: docker-scans
+
+on:
+  workflow_call:
+
+jobs:
+  docker-file-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Lint Dockerfile with Hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build local Docker image
+        run: docker build -t easyshop:scan .    
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: 'image'
+          image-ref: 'easyshop:scan'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          pkg-types: 'os,library'
+          severity: 'CRITICAL,HIGH'
+          scanners: 'vuln'
+
+

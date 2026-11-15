@@ -1,11 +1,16 @@
-FROM node:20-alpine
+FROM node:24-alpine
 
 ENV NODE_ENV=production
 WORKDIR /app
 
-# Install only production dependencies (cached unless package files change)
+# Patch OS packages (openssl, musl, zlib)
+RUN apk update && apk upgrade --no-cache
+
+# Install only production dependencies, then remove bundled npm/npx so Trivy doesn't flag npm's internal packages
 COPY package*.json ./
-RUN npm ci --omit=dev && npm cache clean --force
+RUN npm ci --omit=dev \
+  && npm cache clean --force \
+  && rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /usr/local/lib/node_modules/corepack /usr/local/bin/corepack
 
 # Application code
 COPY src ./src

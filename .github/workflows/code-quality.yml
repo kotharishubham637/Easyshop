@@ -1,0 +1,36 @@
+name: code quality
+
+on:
+  workflow_call:
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
+jobs:
+  sast:
+    name: SAST & Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v7
+
+      - name: Initialize CodeQL (SAST)
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Install Node.js dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Run linters
+        run: npm run lint
+
+      - name: Perform CodeQL SAST Analysis
+        uses: github/codeql-action/analyze@v3
