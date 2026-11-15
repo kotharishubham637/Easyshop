@@ -29,10 +29,11 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@v0.36.0
         with:
-          image-ref: easyshop:scan
+          scan-type: 'image'
+          image-ref: 'easyshop:scan'
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
-          vuln-type: 'os,library'
+          pkg-types: 'os,library'
           severity: 'CRITICAL,HIGH'
-
+          scanners: 'vuln'
