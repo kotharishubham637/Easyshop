@@ -24,10 +24,7 @@ jobs:
         uses: docker/setup-buildx-action@v4
 
       - name: Build local Docker image
-        run: docker build -t easyshop:scan .
-
-      - name: run the audit command
-        run: npm audit fix    
+        run: docker build -t easyshop:scan .    
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@v0.36.0
