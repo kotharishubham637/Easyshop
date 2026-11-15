@@ -1,4 +1,4 @@
-# goal: To run the end-to-end DevSecOps pipeline
+# goal: Run matrix and all DevSecOps checks in parallel, then push to Docker Hub and deploy
 name: devsecops
 
 on:
@@ -31,7 +31,10 @@ jobs:
   code-test:
     uses: ./.github/workflows/code-tests.yml
 
+  matrix:
+    uses: ./.github/workflows/matrix.yml
+
   docker-push:
     uses: ./.github/workflows/docker-push.yml
-    needs: [code-quality, secret-scanning, dependency-check, docker-scan, sonar-scan, code-test]
+    needs: [code-quality, secret-scanning, dependency-check, docker-scan, sonar-scan, code-test, matrix]
     secrets: inherit
