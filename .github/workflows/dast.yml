@@ -19,7 +19,7 @@ jobs:
           grep -q '^DB_PASSWORD=' .env && sed -i "s|^DB_PASSWORD=.*|DB_PASSWORD=$DB_PASSWORD|" .env || echo "DB_PASSWORD=$DB_PASSWORD" >> .env
           docker compose up -d
           sleep 20
-          docker compose exec -T app npm run db:init
+          docker compose exec -T app node src/scripts/initDb.js
           for i in {1..15}; do
             curl -sf http://localhost:3001/api/health && break
             sleep 2
