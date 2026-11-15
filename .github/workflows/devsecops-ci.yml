@@ -25,4 +25,6 @@ jobs:
 
   docker-scan:
     uses: ./.github/workflows/docker-scans.yml
-
+  
+  sonar-scan:
+    uses: ./.github/workflows/sonar-scan.yml
